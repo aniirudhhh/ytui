@@ -1,0 +1,61 @@
+[package]
+name = "ytui"
+version = "0.1.0"
+edition = "2021"
+description = "Keyboard-first terminal YouTube client"
+authors = []
+license = "MIT"
+
+[[bin]]
+name = "ytui"
+path = "src/main.rs"
+
+[dependencies]
+# TUI
+ratatui = { version = "0.30", features = ["unstable-widget-ref"] }
+crossterm = { version = "0.28", features = ["event-stream"] }
+
+# Async runtime
+tokio = { version = "1", features = ["full"] }
+tokio-stream = "0.1"
+futures = "0.3"
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+
+# Error handling
+anyhow = "1"
+thiserror = "1"
+
+# Tracing / logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# Config directories
+directories = "5"
+
+# HTTP (for feed in later milestones)
+reqwest = { version = "0.12", features = ["json", "rustls-tls", "stream"] }
+
+# SQLite (for later milestones)
+rusqlite = { version = "0.31", features = ["bundled"], optional = true }
+
+# Clipboard
+arboard = { version = "3", optional = true }
+image = "0.25.10"
+ratatui-image = "11.1.0"
+
+[features]
+default = []
+full = ["rusqlite", "arboard"]
+
+[profile.dev]
+opt-level = 0
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+strip = true
